@@ -10,3 +10,7 @@ Technology Required
 ======
 - Web Framework: ExpressJS http://expressjs.com/
 - Database: MongoDB http://www.mongodb.org/
+
+Test
+=====
+- Test at http://localhost:3000/

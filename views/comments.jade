@@ -1,0 +1,10 @@
+h1 Comments
+
+ul
+	each commentObject in comments
+		include comment
+
+form(action="/", method="POST")
+	textarea(rows="4", cols="50", name="content")
+	br
+	input(type="submit", value="Comment")
