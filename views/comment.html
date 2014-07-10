@@ -1,0 +1,10 @@
+<b>{{ commentObject.time.toString().substring(4,21)}}</b> 
+	<li>
+		{{ commentObject['content'] }}
+	</li>
+<br />
+<form action="/{{ commentObject._id.toString()}}" method="POST">
+	<input type="hidden" name="_method" value="delete">
+	<button type="submit">Delete</button>
+</form>
+<hr/>

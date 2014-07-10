@@ -1,15 +1,18 @@
 var express = require('express'),
     mongoose = require('mongoose'),
-    http = require('http');
+    http = require('http'),
+    swig  = require('swig');
 
 var app = express();
 
 // CONFIG
 app.configure(function(){
     app.set('port', process.env.PORT || 3000);
-    app.set('views', __dirname + '/views');
-    app.set('view engine','jade');
+    app.set('views', __dirname + '/views'); 
+    app.set('view engine','html');
         
+    app.engine('html',swig.renderFile);
+
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(app.router);
@@ -22,13 +25,14 @@ var CommentSchema = new mongoose.Schema({
     id: Number,
     content: String,
     time: Date
-}),
+}), 
     Comments = mongoose.model('Comments',CommentSchema);
 
 //INDEX
 app.get("/",function(req,res){
     Comments.find({},function(err,docs){
-        res.render('comments',{comments:docs});
+        res.render('comments',{ pagename:'Comments!',
+                                comments:docs});        
     });
 });
 
