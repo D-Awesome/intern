@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<script src="/javascripts/angular.min.js"></script>
+	
+	<script src="/javascripts/controller.js"></script>
+</head>
+<body>
+<h1>{{ pagename }}</h1>
+<div ng-controller="mainController">
+	<ul>
+		<li ng-repeat="commentObject in comments" >
+			{% raw %}
+				@{{commentObject.time | date:'yyyy-MM-dd| HH:mm'}}: <b>{{commentObject.content}}</b>
+			{% endraw %}
+			<button type="submit" ng-click="deleteComment(commentObject._id)">Delete</button>	
+		</li>
+	</ul>
+
+	<form>
+		<input type="text" name="content" ng-model="formData.content">
+		<br/>
+		<button type="submit" ng-click="createComment()"/>Post</button>
+	</form>
+</div>
+
+</body>
+</html>

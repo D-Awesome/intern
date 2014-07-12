@@ -28,16 +28,22 @@ var CommentSchema = new mongoose.Schema({
 }), 
     Comments = mongoose.model('Comments',CommentSchema);
 
+
 //INDEX
 app.get("/",function(req,res){
-    Comments.find({},function(err,docs){
-        res.render('comments',{ pagename:'Comments!',
-                                comments:docs});        
+    res.render('index',{ pagename:'Comments - Task 2'});     
+});
+
+//READ
+app.get("/api/comment",function(req,res){
+    Comments.find({},function(err,comments){
+        if (err) res.send(err);
+        res.json(comments);
     });
 });
 
 //CREATE
-app.post("/",function(req,res){
+app.post("/api/comment",function(req,res){
     var b = req.body;
     if(b.content.trim().length == 0){           
         console.log('No content');
@@ -48,19 +54,26 @@ app.post("/",function(req,res){
             time: new Date()
         }).save(function(err,comment){
             if(err) res.json(err);
-            res.redirect("/");
+            Comments.find({},function(err,comments){
+                if(err) res.json(err);
+                res.json(comments);
+            });
         });
     }
 });
 
 //DELETE
-app.delete("/:id",function(req,res){
-    Comments.remove({_id: req.params.id}, 
-    function(err){
+app.delete("/api/comment/:commentId",function(req,res){
+    Comments.remove({_id: req.params.commentId}, 
+    function(err,comment){
         if(err) res.json(err);
-        res.redirect('/');
+        Comments.find({},function(err,comments){
+            if(err) res.json(err);
+            res.json(comments);
+        });
     });
 });
+
 
 //CONSOLE
 http.createServer(app).listen(app.get('port'),function(){
