@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html ng-app="myApp">
 <head>
-	<script src="/javascripts/angular.min.js"></script>
-	
+	<script src="/javascripts/angular.js"></script>
+	<script src="/javascripts/angular-resource.js"></script>
 	<script src="/javascripts/controller.js"></script>
 </head>
 <body>
@@ -13,12 +13,12 @@
 			{% raw %}
 				@{{commentObject.time | date:'yyyy-MM-dd| HH:mm'}}: <b>{{commentObject.content}}</b>
 			{% endraw %}
-			<button type="submit" ng-click="deleteComment(commentObject._id)">Delete</button>	
+			<button type="submit" ng-click="deleteComment(commentObject._id,$index)">Delete</button>	
 		</li>
 	</ul>
 
 	<form>
-		<input type="text" name="content" ng-model="formData.content">
+		<input type="text" name="content" ng-model="item.content">
 		<br/>
 		<button type="submit" ng-click="createComment()"/>Post</button>
 	</form>

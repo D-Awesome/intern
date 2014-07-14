@@ -1,38 +1,25 @@
-var myApp = angular.module('myApp',[]);
+var app = angular.module('myApp',['ngResource']);
 
-function mainController($scope,$http){
+app.factory('Comments', function($resource){
+	return $resource('/api/comment/:commentId');
+});
+
+function mainController($scope,Comments){
 	$scope.formData = {};
-
-	$http.get('/api/comment')
-		.success(function(data){
-			$scope.comments = data;
-			console.log(data);
-		})
-		.error(function(data){
-			console.log('Error: ' + data);
-		});
+	$scope.comments = Comments.query();
 
 	$scope.createComment = function(){
-		$http.post('/api/comment',$scope.formData)
-			.success(function(data){
-				$scope.formData = {};
-				$scope.comments = data;
-				console.log('posting comment');
-			})
-			.error(function(data){
-				console.log('Error: ' + data);
-			})
+		Comments.save($scope.item);
+		//update locally
+		newComment = {content:$scope.item.content,time:new Date()};
+		$scope.comments.push(newComment);
+		$scope.item = {};
 	}
 
-	$scope.deleteComment = function(commentId){
-		$http.delete('/api/comment/' + commentId)
-			.success(function(data){
-				$scope.comments = data;
-				console.log('deleting comment');
-			})
-			.error(function(data){
-				console.log('Error: ' + data);
-			});
+	$scope.deleteComment = function(Id,index){
+		Comments.delete({commentId: Id });
+		//remove locally
+		$scope.comments.splice(index,1);	
+		
 	}
 }
-

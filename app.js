@@ -22,7 +22,6 @@ app.configure(function(){
 mongoose.connect("mongodb://localhost/intern1");
 
 var CommentSchema = new mongoose.Schema({
-    id: Number,
     content: String,
     time: Date
 }), 
