@@ -4,22 +4,44 @@ app.factory('Comments', function($resource){
 	return $resource('/api/comment/:commentId');
 });
 
-function mainController($scope,Comments){
+app.factory('socket',function(){
+	var socket = io();
+	return socket;
+});
+
+function mainController($scope,Comments,socket){
 	$scope.formData = {};
 	$scope.comments = Comments.query();
 
+	socket.on('a user connected', function(data){
+		$scope.userNumber = data;
+		$scope.$digest();		
+	});
+
+	socket.on('a user disconnected', function(data){
+		$scope.userNumber = data;
+		$scope.$digest();
+	});
+
 	$scope.createComment = function(){
-		Comments.save($scope.item);
-		//update locally
-		newComment = {content:$scope.item.content,time:new Date()};
-		$scope.comments.push(newComment);
-		$scope.item = {};
+		Comments.save($scope.item,function(data){
+			socket.emit('post comment',data);
+			$scope.item = {};
+		});
 	}
+
+	socket.on('post comment', function(data){
+		$scope.comments.push(data);
+		$scope.$digest();
+	});
 
 	$scope.deleteComment = function(Id,index){
 		Comments.delete({commentId: Id });
-		//remove locally
-		$scope.comments.splice(index,1);	
-		
+		socket.emit('delete comment',index);
 	}
+
+	socket.on('delete comment',function(data){
+		$scope.comments.splice(data,1);
+		$scope.$digest();
+	});
 }

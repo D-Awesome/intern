@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="myApp"> 
+<html ng-app="myApp" > 
 <head>
 	<script src="/components/angular/angular.js"></script>
 	<script src="/components/angular-resource/angular-resource.js"></script>
@@ -7,21 +7,29 @@
 </head>
 <body>
 <h1>{{ pagename }}</h1>
-<div ng-controller="mainController">
-	<ul>
-		<li ng-repeat="commentObject in comments" >
-			{% raw %}
-				@{{commentObject.time | date:'yyyy-MM-dd| HH:mm'}}: <b>{{commentObject.content}}</b>
-			{% endraw %}
-			<button type="submit" ng-click="deleteComment(commentObject._id,$index)">Delete</button>	
-		</li>
-	</ul>
 
-	<form>
-		<input type="text" name="content" ng-model="item.content">
-		<br/>
-		<button type="submit" ng-click="createComment()"/>Post</button>
-	</form>
+<div ng-controller="mainController">
+	<h3>
+		{% raw %}
+			Number of user online: {{ userNumber }}
+		{% endraw %}
+	</h3>
+
+		<ul>
+			<li ng-repeat="commentObject in comments" >
+				{% raw %}
+					@{{commentObject.time | date:'yyyy-MM-dd| HH:mm'}}: <b>{{commentObject.content}}</b>
+				{% endraw %}
+				<button type="submit" ng-click="deleteComment(commentObject._id,$index)">Delete</button>	
+			</li>
+		</ul>
+
+		<form>
+			<input type="text" name="content" ng-model="item.content">
+			<br/>
+			<button type="submit" ng-click="createComment()"/>Post</button>
+		</form>
+	<script src="/socket.io/socket.io.js"></script>
 </div>
 
 </body>
